@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+<h2>Task 6: Canvas Dynamic Pattern</h2>
+<canvas id="patternCanvas" width="500" height="300">
+
+</canvas>
+
+    <script>
+        
+
+  const patternCanvas = document.getElementById('patternCanvas');
+  const patternCtx = patternCanvas.getContext('2d');
+
+  let angle = 0;
+  let hue = 0;
+
+  function drawPattern() {
+    patternCtx.clearRect(0, 0, patternCanvas.width, patternCanvas.height);
+
+    const centerX = patternCanvas.width / 2;
+    const centerY = patternCanvas.height / 2;
+
+    // animated rotating circles
+    for (let i = 0; i < 12; i++) {
+      const rad = (Math.PI * 2 / 12) * i + angle;
+      const x = centerX + Math.cos(rad) * 100;
+      const y = centerY + Math.sin(rad) * 20;
+
+      patternCtx.beginPath();
+      patternCtx.arc(x, y, 10, 0, Math.PI * 2);
+      patternCtx.fillStyle = `hsl(${hue + i * 30}, 70%, 50%)`;
+      patternCtx.fill();
+    }
+
+    // Increment rotation and hue
+    angle += 0.02;
+    hue = (hue + 1) % 360;
+
+    requestAnimationFrame(drawPattern);
+  }
+
+  // changes colors
+  patternCanvas.addEventListener('click', () => {
+    hue = Math.random() * 360;
+  });
+
+  drawPattern();
+
+    </script>
+</body>
+</html>

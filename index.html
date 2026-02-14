@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Interactive Graphics & Canvas Assessment</title>
+<style>
+  /* Basic styles for layout and hover effects */
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+
+  h2 {
+    margin-top: 40px;
+  }
+
+  /* Style for SVG interactive shapes (Task 1) */
+  #svgShapes svg {
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+  }
+
+  /* Style for venue map (Task 3) */
+  #venueMap {
+    border: 1px solid #ccc;
+    width: 500px;
+    height: 400px;
+  }
+
+  /* Style for SVG chart (Task 5) */
+  #chart svg {
+    width: 500px;
+    height: 300px;
+    border: 1px solid #ccc;
+  }
+
+  /* Style for Canvas badge (Task 4) and pattern (Task 6) */
+  canvas {
+    border: 1px solid #ccc;
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+  <a src="./speaker.html">speaker</a>
+  <a src="./task-6.html">task 6</a>
+  <a src="./task5.html">task 5</a>
+<h1>Interactive Graphics & Canvas Assessment</h1>
+
+<!-- Task 1: SVG Shapes with hover and click -->
+<h2>Task 1: SVG Shapes with Interactivity</h2>
+<div id="svgShapes">
+  <svg width="500" height="400">
+    <!-- Circle -->
+    <circle id="circle" cx="100" cy="100" r="50" fill="blue" style="cursor:pointer;"
+      onmouseover="hoverShape(evt, 'circle')" onmouseout="leaveShape(evt, 'circle')"
+      onclick="alert('Circle')"/>
+    <!-- Rectangle -->
+    <rect id="rect" x="200" y="50" width="100" height="100" fill="green" style="cursor:pointer;"
+      onmouseover="hoverShape(evt, 'rect')" onmouseout="leaveShape(evt, 'rect')"
+      onclick="alert('Rectangle')"/>
+    <!-- Polygon (triangle) -->
+    <polygon id="polygon" points="350,150 400,50 450,150" fill="orange" style="cursor:pointer;"
+      onmouseover="hoverShape(evt, 'polygon')" onmouseout="leaveShape(evt, 'polygon')"
+      onclick="alert('Polygon')"/>
+  </svg>
+</div>
+
+<!-- Canvas for Sun -->
+ 
+<h2>Task 2: Canvas Drawing Pattern - Sun</h2>
+<canvas id="sunCanvas" width="600" height="400"></canvas>
+
+<!-- Canvas for Star -->
+<h2>Task 2: Canvas Drawing Pattern - Star</h2>
+<canvas id="starCanvas" width="600" height="400"></canvas>
+
+<!-- Canvas for Abstract Design -->
+<h2>Task 2: Canvas Drawing Pattern - Abstract Design</h2>
+<canvas id="abstractCanvas" width="600" height="400"></canvas>
+<!-- Task 3: Venue Map with sections -->
+<h2>Task 3: Venue Map with Sections</h2>
+<svg id="venueMap" viewBox="0 0 500 400">
+  <!-- Stage -->
+  <rect id="stage" x="200" y="50" width="100" height="50" fill="#8e44ad" style="cursor:pointer;"
+    onmouseover="highlightSection(evt)" onmouseout="unhighlightSection(evt)"
+    onclick="showSectionInfo('Stage', 50, 'Main stage')"/>
+  <text x="250" y="80" text-anchor="middle" fill="#fff" font-size="14">Stage</text>
+
+  <!-- Seating Area 1 -->
+  <rect id="seating1" x="50" y="150" width="150" height="100" fill="#3498db" style="cursor:pointer;"
+    onmouseover="highlightSection(evt)" onmouseout="unhighlightSection(evt)"
+    onclick="showSectionInfo('Seating Area 1', 150, 'General seating')"/>
+  <text x="125" y="200" text-anchor="middle" fill="#fff" font-size="14">Seating 1</text>
+
+  <!-- Seating Area 2 -->
+  <rect id="seating2" x="300" y="150" width="150" height="100" fill="#e67e22" style="cursor:pointer;"
+    onmouseover="highlightSection(evt)" onmouseout="unhighlightSection(evt)"
+    onclick="showSectionInfo('Seating Area 2', 150, 'VIP seating')"/>
+  <text x="375" y="200" text-anchor="middle" fill="#fff" font-size="14">Seating 2</text>
+
+  <!-- Back area -->
+  <rect id="backArea" x="175" y="300" width="150" height="50" fill="#2ecc71" style="cursor:pointer;"
+    onmouseover="highlightSection(evt)" onmouseout="unhighlightSection(evt)"
+    onclick="showSectionInfo('Back Area', 50, 'Service and backstage')"/>
+  <text x="250" y="330" text-anchor="middle" fill="#fff" font-size="14">Back Area</text>
+</svg>
+
+
+
+
+
+
+<script>
+
+// Common context variables
+  const sunCtx = document.getElementById('sunCanvas').getContext('2d');
+  const starCtx = document.getElementById('starCanvas').getContext('2d');
+  const abstractCtx = document.getElementById('abstractCanvas').getContext('2d');
+
+  // Draw Sun
+function drawSun() {
+  const ctx = sunCtx;
+  ctx.clearRect(0, 0, 600, 400);
+  const centerX = 300;
+  const centerY = 200;
+  const radius = 50;
+
+  // Draw Sun core
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+  ctx.fillStyle = 'yellow';
+  ctx.fill();
+
+  // Draw Sun rays
+  for (let i = 0; i < 12; i++) {
+    const angle = (Math.PI * 2 / 12) * i;
+    ctx.strokeStyle = 'orange';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(centerX + Math.cos(angle) * radius, centerY + Math.sin(angle) * radius);
+    ctx.lineTo(centerX + Math.cos(angle) * (radius + 30), centerY + Math.sin(angle) * (radius + 30));
+    ctx.stroke();
+  }
+}
+drawSun();
+
+
+// Draw Star
+function drawStar() {
+  const ctx = starCtx;
+  ctx.clearRect(0, 0, 600, 400);
+  const x = 300;
+  const y = 200;
+  const outerRadius = 80;
+  const innerRadius = 30;
+  const points = 5;
+  ctx.fillStyle = 'gold';
+
+  ctx.beginPath();
+  for (let i = 0; i < points * 2; i++) {
+    const angle = (Math.PI * i) / points;
+    const r = i % 2 === 0 ? outerRadius : innerRadius;
+    const px = x + Math.cos(angle - Math.PI / 2) * r;
+    const py = y + Math.sin(angle - Math.PI / 2) * r;
+    if (i === 0) {
+      ctx.moveTo(px, py);
+    } else {
+      ctx.lineTo(px, py);
+    }
+  }
+  ctx.closePath();
+  ctx.fill();
+}
+drawStar();
+
+// Draw Abstract Design
+function drawAbstract() {
+  const ctx = abstractCtx;
+  ctx.clearRect(0, 0, 600, 400);
+
+  // Draw multiple overlapping circles with varying colors and positions
+  for (let i = 0; i < 10; i++) {
+    ctx.beginPath();
+    ctx.arc(
+      Math.random() * 600,
+      Math.random() * 400,
+      Math.random() * 50 + 20,
+      0,
+      Math.PI * 2
+    );
+    ctx.fillStyle = `hsl(${Math.random() * 360}, 70%, 60%)`;
+    ctx.fill();
+  }
+
+  // Draw random lines
+  for (let i = 0; i < 15; i++) {
+    ctx.strokeStyle = `hsl(${Math.random() * 360}, 70%, 50%)`;
+    ctx.lineWidth = Math.random() * 3 + 1;
+    ctx.beginPath();
+    ctx.moveTo(Math.random() * 600, Math.random() * 400);
+    ctx.lineTo(Math.random() * 600, Math.random() * 400);
+    ctx.stroke();
+  }
+}
+
+
+drawAbstract();
+
+
+  // ========================= Task 1: SVG Shapes =========================
+  function hoverShape(evt, shapeId) {
+    const shape = document.getElementById(shapeId);
+    shape.setAttribute('fill', 'red');
+    if (shapeId === 'circle') {
+      shape.setAttribute('r', '60'); // increase radius
+    } else if (shapeId === 'rect') {
+      shape.setAttribute('width', '120');
+      shape.setAttribute('height', '120');
+    } else if (shapeId === 'polygon') {
+      shape.setAttribute('points', '340,150 410,50 460,150'); // change shape
+    }
+  }
+
+  function leaveShape(evt, shapeId) {
+    const shape = document.getElementById(shapeId);
+    // Reset to original color and size
+    if (shapeId === 'circle') {
+      shape.setAttribute('fill', 'blue');
+      shape.setAttribute('r', '50');
+    } else if (shapeId === 'rect') {
+      shape.setAttribute('fill', 'green');
+      shape.setAttribute('width', '100');
+      shape.setAttribute('height', '100');
+    } else if (shapeId === 'polygon') {
+      shape.setAttribute('fill', 'orange');
+      shape.setAttribute('points', '350,150 400,50 450,150');
+    }
+  }
+
+  // ========================= Task 2: Canvas Pattern =========================
+  const canvas2 = document.getElementById('canvasPattern');
+  const ctx2 = canvas2.getContext('2d');
+
+  function drawPattern() {
+    // Draw a sun with rays
+    ctx2.fillStyle = 'yellow';
+    ctx2.beginPath();
+    ctx2.arc(300, 200, 50, 0, Math.PI * 2);
+    ctx2.fill();
+
+    // Draw sun rays
+    for (let i = 0; i < 12; i++) {
+      const angle = (Math.PI * 2 / 12) * i;
+      ctx2.strokeStyle = 'orange';
+      ctx2.lineWidth = 2;
+      ctx2.beginPath();
+      ctx2.moveTo(300 + Math.cos(angle) * 50, 200 + Math.sin(angle) * 50);
+      ctx2.lineTo(300 + Math.cos(angle) * 80, 200 + Math.sin(angle) * 80);
+      ctx2.stroke();
+    }
+
+    // Draw some abstract lines
+    ctx2.strokeStyle = 'purple';
+    ctx2.lineWidth = 3;
+    ctx2.beginPath();
+    ctx2.moveTo(100, 300);
+    ctx2.lineTo(500, 100);
+    ctx2.lineTo(100, 100);
+    ctx2.lineTo(500, 300);
+    ctx2.closePath();
+    ctx2.stroke();
+  }
+
+  drawPattern();
+
+  // ========================= Task 3: Venue Map =========================
+  function highlightSection(evt) {
+    evt.target.setAttribute('opacity', '0.5');
+  }
+
+  function unhighlightSection(evt) {
+    evt.target.setAttribute('opacity', '1');
+  }
+
+  function showSectionInfo(name, capacity, description) {
+    alert(`Section: ${name}\nCapacity: ${capacity}\nDescription: ${description}`);
+  }
+
+  
+   
+
+  
+
+</script>
+</body>
+</html>

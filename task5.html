@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   
+<h2>Task 5: SVG Interactive Bar Chart</h2>
+<div id="chart">
+  <svg id="barChart" viewBox="0 0 500 300"></svg>
+</div>
+<script>
+
+  const barChart = document.getElementById('barChart');
+
+  const data = [
+    { label: 'A', value: 80 },
+    { label: 'B', value: 120 },
+    { label: 'C', value: 60 },
+    { label: 'D', value: 100 },
+  ];
+
+  function createBarChart() {
+    const width = 500;
+    const height = 300;
+    const maxVal = Math.max(...data.map(d => d.value));
+    const barWidth = 80;
+    const padding = 20;
+
+    data.forEach((d, i) => {
+      const x = padding + i * (barWidth + padding);
+      const barHeight = (d.value / maxVal) * (height - 50);
+      const y = height - barHeight - 20;
+
+      // rect for bar
+      const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      rect.setAttribute('x', x);
+      rect.setAttribute('y', y);
+      rect.setAttribute('width', barWidth);
+      rect.setAttribute('height', barHeight);
+      rect.setAttribute('fill', '#3498db');
+      rect.setAttribute('stroke', '#2980b9');
+      rect.setAttribute('cursor', 'pointer');
+
+      // hover effect
+      rect.addEventListener('mouseover', () => {
+        rect.setAttribute('fill', '#e74c3c');
+      });
+      rect.addEventListener('mouseout', () => {
+        rect.setAttribute('fill', '#3498db');
+      });
+
+      // click event
+      rect.addEventListener('click', () => {
+        alert(`Section ${d.label}: ${d.value}`);
+      });
+
+      // label
+      const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      label.setAttribute('x', x + barWidth / 2);
+      label.setAttribute('y', height - 5);
+      label.setAttribute('text-anchor', 'middle');
+      label.setAttribute('font-size', '12px');
+      label.setAttribute('fill', '#2c3e50');
+      label.textContent = d.label;
+
+      barChart.appendChild(rect);
+      barChart.appendChild(label);
+    });
+  }
+
+  createBarChart();
+  </script>
+</body>
+</html>
+

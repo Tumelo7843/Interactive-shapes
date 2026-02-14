@@ -1,0 +1,83 @@
+<h2>Speaker Badge</h2>
+<canvas id="badgeCanvas" width="400" height="200"></canvas>
+
+<script>
+  // Variables for speaker details
+  const speakerName = "Jane Smith";
+  const speakerRole = "Guest Speaker";
+
+  const canvas = document.getElementById("badgeCanvas");
+  const ctx = canvas.getContext("2d");
+
+  function drawBadge(name, role) {
+    // previous content
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw badge background with rounded corners
+    const radius = 20;
+    ctx.fillStyle = "#f39c12"; // Badge background color
+    ctx.beginPath();
+    ctx.moveTo(radius, 0);
+    ctx.lineTo(canvas.width - radius, 0);
+    ctx.quadraticCurveTo(canvas.width, 0, canvas.width, radius);
+    ctx.lineTo(canvas.width, canvas.height - radius);
+    ctx.quadraticCurveTo(canvas.width, canvas.height, canvas.width - radius, canvas.height);
+    ctx.lineTo(radius, canvas.height);
+    ctx.quadraticCurveTo(0, canvas.height, 0, canvas.height - radius);
+    ctx.lineTo(0, radius);
+    ctx.quadraticCurveTo(0, 0, radius, 0);
+    ctx.closePath();
+    ctx.fill();
+
+    // Draw decorative pattern: diagonal lines
+    ctx.strokeStyle = "rgba(255,255,255,0.3)";
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 10; i++) {
+      ctx.beginPath();
+      ctx.moveTo(i * 40, 0);
+      ctx.lineTo(0, i * 40);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(canvas.width - i * 40, 0);
+      ctx.lineTo(canvas.width, i * 40);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(i * 40, canvas.height);
+      ctx.lineTo(canvas.width, canvas.height - i * 40);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(canvas.width - i * 40, canvas.height);
+      ctx.lineTo(0, canvas.height - i * 40);
+      ctx.stroke();
+    }
+
+    //  event logo (circle icon)
+    ctx.beginPath();
+    ctx.arc(50, 50, 30, 0, Math.PI * 2);
+    ctx.fillStyle = "#2980b9";
+    ctx.fill();
+
+    // Optional: add a simple icon inside the circle, like a star
+    ctx.fillStyle = "#fff";
+    ctx.font = "24px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("★", 50, 50);
+
+    // Add speaker name
+    ctx.fillStyle = "#fff";
+    ctx.font = "20px Arial bold";
+    ctx.textAlign = "left";
+    ctx.fillText("Name: " + name, 100, 70);
+
+    // Add role
+    ctx.font = "16px Arial";
+    ctx.fillText("Role: " + role, 100, 100);
+  }
+
+  // Generate the badge with current variables
+  drawBadge(speakerName, speakerRole);
+</script>
