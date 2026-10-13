@@ -1,1 +1,169 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101114"><title>Orbit — Forma Motion Lab</title><link rel="stylesheet" href="./shared.css"><style>.page{--accent:#78e6db}.stage{height:min(58vw,500px);min-height:330px}.stage canvas{width:100%;height:100%;max-height:none}.toolbar{justify-content:space-between}.left-tools,.right-tools{display:flex;align-items:center;gap:10px}.palette{display:flex;gap:7px}.swatch{width:21px;height:21px;padding:0;border:2px solid transparent;border-radius:50%;cursor:pointer;background:var(--sw);transition:.2s}.swatch:hover{transform:scale(1.15)}.swatch.active{border-color:#fff;box-shadow:0 0 0 2px #191a1f,0 0 0 3px var(--sw)}.swatch:nth-child(1){--sw:#78e6db}.swatch:nth-child(2){--sw:#d3fa77}.swatch:nth-child(3){--sw:#ff82bd}.swatch:nth-child(4){--sw:#a892ff}.swatch:nth-child(5){--sw:#ffad70}input[type=range]{width:88px;accent-color:#78e6db}.counter{position:absolute;top:18px;left:20px;z-index:1;color:#777983;font:10px 'DM Mono',monospace;letter-spacing:.08em}.stage .hint{position:absolute;bottom:17px;right:20px;z-index:1;color:#777983;font:10px 'DM Mono',monospace}@media(max-width:620px){.stage{height:330px}.toolbar{align-items:flex-start}.left-tools,.right-tools{flex-wrap:wrap}.right-tools{justify-content:flex-end}input[type=range]{width:65px}}</style></head><body><header class="topbar"><a class="brand" href="./index.html"><span class="brandmark">✳</span>forma <em>/ lab</em></a><nav class="nav"><a href="./index.html">Shape lab</a><a class="active" href="./task-6.html">Pattern</a><a href="./task5.html">Chart</a><a href="./speaker.html">Speaker badge</a></nav></header><main class="page"><div class="eyebrow">Canvas study / 002</div><h1>Orbit in color.</h1><p class="lead">A little kinetic color study. Change the palette, tune the pace, or tap the canvas to shift its orbit.</p><section class="panel" style="margin-top:30px"><div class="panel-head"><span>01 — Orbital system</span><span class="status"><i></i>Live animation</span></div><div class="stage" id="stage"><span class="counter">12 PARTICLES　·　3 ORBITS</span><canvas id="patternCanvas" aria-label="Animated colorful orbit pattern"></canvas><span class="hint">TAP CANVAS TO REMIX</span></div><div class="toolbar"><div class="left-tools"><label>Palette</label><div class="palette" aria-label="Choose palette"><button class="swatch active" data-hue="174" aria-label="Sea glass"></button><button class="swatch" data-hue="82" aria-label="Lime"></button><button class="swatch" data-hue="333" aria-label="Pink"></button><button class="swatch" data-hue="253" aria-label="Lilac"></button><button class="swatch" data-hue="27" aria-label="Peach"></button></div></div><div class="right-tools"><label for="speed">Pace</label><input id="speed" type="range" min="0.3" max="2" step="0.1" value="1"><button id="pause" class="button">Pause</button><button id="remix" class="button primary">Remix ↗</button></div></div></section><div class="page-foot"><span>CANVAS API · REQUESTANIMATIONFRAME</span><span>NEXT UP → <a href="./task5.html">Interactive chart</a></span></div></main><footer class="site-footer"><span>FORMA LAB · CREATIVE CODE SERIES</span><span>SHAPE → PATTERN → DATA → PEOPLE</span></footer><script>const canvas=document.getElementById('patternCanvas'),ctx=canvas.getContext('2d'),stage=document.getElementById('stage');let angle=0,hue=174,speed=1,running=true,last=0,raf;function resize(){const r=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(r.width*dpr);canvas.height=Math.round(r.height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0)}new ResizeObserver(resize).observe(canvas);resize();function frame(time){raf=requestAnimationFrame(frame);if(!running)return;const dt=Math.min((time-last)/16.67||1,2);last=time;const w=canvas.clientWidth,h=canvas.clientHeight,cx=w/2,cy=h/2,scale=Math.min(w/760,h/460);ctx.clearRect(0,0,w,h);for(let ring=0;ring<3;ring++){const rx=(85+ring*53)*scale,ry=(30+ring*35)*scale;ctx.beginPath();ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2);ctx.strokeStyle='rgba(255,255,255,.12)';ctx.lineWidth=1;ctx.setLineDash([2,7]);ctx.stroke();ctx.setLineDash([]);for(let j=0;j<8;j++){const a=angle*(ring%2?-1:1)+j*Math.PI/4+ring*.7,x=cx+Math.cos(a)*rx,y=cy+Math.sin(a)*ry,r=(ring===0?4.5:3.2)*scale;const grad=ctx.createRadialGradient(x-r*.3,y-r*.3,0,x,y,r*2.8);grad.addColorStop(0,'hsla('+(hue+j*13+ring*28)+',95%,88%,1)');grad.addColorStop(.25,'hsla('+(hue+j*13+ring*28)+',88%,67%,1)');grad.addColorStop(1,'hsla('+(hue+j*13+ring*28)+',85%,52%,0)');ctx.fillStyle=grad;ctx.beginPath();ctx.arc(x,y,r*2.8,0,Math.PI*2);ctx.fill();ctx.fillStyle='hsl('+(hue+j*13+ring*28)+',90%,75%)';ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill()}}const glow=ctx.createRadialGradient(cx,cy,0,cx,cy,90*scale);glow.addColorStop(0,'hsla('+hue+',90%,65%,.18)');glow.addColorStop(1,'transparent');ctx.fillStyle=glow;ctx.fillRect(cx-100*scale,cy-100*scale,200*scale,200*scale);angle+=.006*speed*dt}raf=requestAnimationFrame(frame);document.querySelectorAll('.swatch').forEach(b=>b.onclick=()=>{hue=Number(b.dataset.hue);document.querySelectorAll('.swatch').forEach(x=>x.classList.toggle('active',x===b))});document.getElementById('speed').oninput=e=>speed=Number(e.target.value);function remix(){hue=Math.floor(Math.random()*360);angle+=Math.PI/5;document.querySelectorAll('.swatch').forEach(x=>x.classList.remove('active'))}document.getElementById('remix').onclick=remix;canvas.onclick=remix;document.getElementById('pause').onclick=e=>{running=!running;e.currentTarget.textContent=running?'Pause':'Resume';if(running)last=performance.now()};</script></body></html>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#101114">
+    <title>Orbit — Forma Motion Lab</title>
+    <link rel="stylesheet" href="./shared.css">
+    <style>
+        .page {
+            --accent: #78e6db
+        }
+
+        .stage {
+            height: min(58vw, 500px);
+            min-height: 330px
+        }
+
+        .stage canvas {
+            width: 100%;
+            height: 100%;
+            max-height: none
+        }
+
+        .toolbar {
+            justify-content: space-between
+        }
+
+        .left-tools,
+        .right-tools {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .palette {
+            display: flex;
+            gap: 7px
+        }
+
+        .swatch {
+            width: 21px;
+            height: 21px;
+            padding: 0;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            background: var(--sw);
+            transition: .2s
+        }
+
+        .swatch:hover {
+            transform: scale(1.15)
+        }
+
+        .swatch.active {
+            border-color: #fff;
+            box-shadow: 0 0 0 2px #191a1f, 0 0 0 3px var(--sw)
+        }
+
+        .swatch:nth-child(1) {
+            --sw: #78e6db
+        }
+
+        .swatch:nth-child(2) {
+            --sw: #d3fa77
+        }
+
+        .swatch:nth-child(3) {
+            --sw: #ff82bd
+        }
+
+        .swatch:nth-child(4) {
+            --sw: #a892ff
+        }
+
+        .swatch:nth-child(5) {
+            --sw: #ffad70
+        }
+
+        input[type=range] {
+            width: 88px;
+            accent-color: #78e6db
+        }
+
+        .counter {
+            position: absolute;
+            top: 18px;
+            left: 20px;
+            z-index: 1;
+            color: #777983;
+            font: 10px 'DM Mono', monospace;
+            letter-spacing: .08em
+        }
+
+        .stage .hint {
+            position: absolute;
+            bottom: 17px;
+            right: 20px;
+            z-index: 1;
+            color: #777983;
+            font: 10px 'DM Mono', monospace
+        }
+
+        @media(max-width:620px) {
+            .stage {
+                height: 330px
+            }
+
+            .toolbar {
+                align-items: flex-start
+            }
+
+            .left-tools,
+            .right-tools {
+                flex-wrap: wrap
+            }
+
+            .right-tools {
+                justify-content: flex-end
+            }
+
+            input[type=range] {
+                width: 65px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar"><a class="brand" href="./index.html"><span class="brandmark">✳</span>forma <em>/ lab</em></a>
+        <nav class="nav"><a href="./index.html">Shape lab</a><a class="active" href="./task-6.html">Pattern</a><a
+                href="./task5.html">Chart</a><a href="./speaker.html">Speaker badge</a></nav>
+    </header>
+    <main class="page">
+        <div class="eyebrow">Canvas study / 002</div>
+        <h1>Orbit in color.</h1>
+        <p class="lead">A little kinetic color study. Change the palette, tune the pace, or tap the canvas to shift its
+            orbit.</p>
+        <section class="panel" style="margin-top:30px">
+            <div class="panel-head"><span>01 — Orbital system</span><span class="status"><i></i>Live animation</span>
+            </div>
+            <div class="stage" id="stage"><span class="counter">12 PARTICLES　·　3 ORBITS</span><canvas id="patternCanvas"
+                    aria-label="Animated colorful orbit pattern"></canvas><span class="hint">TAP CANVAS TO REMIX</span>
+            </div>
+            <div class="toolbar">
+                <div class="left-tools"><label>Palette</label>
+                    <div class="palette" aria-label="Choose palette"><button class="swatch active" data-hue="174"
+                            aria-label="Sea glass"></button><button class="swatch" data-hue="82"
+                            aria-label="Lime"></button><button class="swatch" data-hue="333"
+                            aria-label="Pink"></button><button class="swatch" data-hue="253"
+                            aria-label="Lilac"></button><button class="swatch" data-hue="27"
+                            aria-label="Peach"></button></div>
+                </div>
+                <div class="right-tools"><label for="speed">Pace</label><input id="speed" type="range" min="0.3" max="2"
+                        step="0.1" value="1"><button id="pause" class="button">Pause</button><button id="remix"
+                        class="button primary">Remix ↗</button></div>
+            </div>
+        </section>
+        <div class="page-foot"><span>CANVAS API · REQUESTANIMATIONFRAME</span><span>NEXT UP → <a
+                    href="./task5.html">Interactive chart</a></span></div>
+    </main>
+    <footer class="site-footer"><span>FORMA LAB · CREATIVE CODE SERIES</span><span>SHAPE → PATTERN → DATA →
+            PEOPLE</span></footer>
+    <script>const canvas = document.getElementById('patternCanvas'), ctx = canvas.getContext('2d'), stage = document.getElementById('stage'); let angle = 0, hue = 174, speed = 1, running = true, last = 0, raf; function resize() { const r = canvas.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2); canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0) } new ResizeObserver(resize).observe(canvas); resize(); function frame(time) { raf = requestAnimationFrame(frame); if (!running) return; const dt = Math.min((time - last) / 16.67 || 1, 2); last = time; const w = canvas.clientWidth, h = canvas.clientHeight, cx = w / 2, cy = h / 2, scale = Math.min(w / 760, h / 460); ctx.clearRect(0, 0, w, h); for (let ring = 0; ring < 3; ring++) { const rx = (85 + ring * 53) * scale, ry = (30 + ring * 35) * scale; ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2); ctx.strokeStyle = 'rgba(255,255,255,.12)'; ctx.lineWidth = 1; ctx.setLineDash([2, 7]); ctx.stroke(); ctx.setLineDash([]); for (let j = 0; j < 8; j++) { const a = angle * (ring % 2 ? -1 : 1) + j * Math.PI / 4 + ring * .7, x = cx + Math.cos(a) * rx, y = cy + Math.sin(a) * ry, r = (ring === 0 ? 4.5 : 3.2) * scale; const grad = ctx.createRadialGradient(x - r * .3, y - r * .3, 0, x, y, r * 2.8); grad.addColorStop(0, 'hsla(' + (hue + j * 13 + ring * 28) + ',95%,88%,1)'); grad.addColorStop(.25, 'hsla(' + (hue + j * 13 + ring * 28) + ',88%,67%,1)'); grad.addColorStop(1, 'hsla(' + (hue + j * 13 + ring * 28) + ',85%,52%,0)'); ctx.fillStyle = grad; ctx.beginPath(); ctx.arc(x, y, r * 2.8, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = 'hsl(' + (hue + j * 13 + ring * 28) + ',90%,75%)'; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill() } } const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, 90 * scale); glow.addColorStop(0, 'hsla(' + hue + ',90%,65%,.18)'); glow.addColorStop(1, 'transparent'); ctx.fillStyle = glow; ctx.fillRect(cx - 100 * scale, cy - 100 * scale, 200 * scale, 200 * scale); angle += .006 * speed * dt } raf = requestAnimationFrame(frame); document.querySelectorAll('.swatch').forEach(b => b.onclick = () => { hue = Number(b.dataset.hue); document.querySelectorAll('.swatch').forEach(x => x.classList.toggle('active', x === b)) }); document.getElementById('speed').oninput = e => speed = Number(e.target.value); function remix() { hue = Math.floor(Math.random() * 360); angle += Math.PI / 5; document.querySelectorAll('.swatch').forEach(x => x.classList.remove('active')) } document.getElementById('remix').onclick = remix; canvas.onclick = remix; document.getElementById('pause').onclick = e => { running = !running; e.currentTarget.textContent = running ? 'Pause' : 'Resume'; if (running) last = performance.now() };</script>
+</body>
+
+</html>

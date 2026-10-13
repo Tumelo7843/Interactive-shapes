@@ -1,2 +1,188 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101114"><title>People — Forma Motion Lab</title><link rel="stylesheet" href="./shared.css"><style>.page{--accent:#ff82bd}.badge-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(230px,.7fr);gap:16px;margin-top:30px}.badge-stage{min-height:365px;padding:24px;position:relative}.badge-stage canvas{width:100%;height:auto;max-height:320px;filter:drop-shadow(0 20px 35px #0007);transition:transform .4s}.badge-stage:hover canvas{transform:translateY(-4px) rotate(-.4deg)}.badge-controls{padding:19px}.field{display:flex;flex-direction:column;gap:8px;margin-bottom:17px}.field label{color:#aeb0b8;font:10px 'DM Mono',monospace;text-transform:uppercase;letter-spacing:.08em}.field input{height:40px;border:1px solid #ffffff18;border-radius:8px;background:#222329;color:#f4f3ef;padding:0 11px;font:13px 'DM Sans',sans-serif;outline:none}.field input:focus{border-color:#ff82bd99;box-shadow:0 0 0 3px #ff82bd18}.theme-picks{display:flex;gap:9px}.theme{width:27px;height:27px;padding:0;border:2px solid transparent;border-radius:8px;background:var(--sw);cursor:pointer;transition:.2s}.theme.active{outline:1px solid white;outline-offset:2px}.theme:nth-child(1){--sw:#ff82bd}.theme:nth-child(2){--sw:#d3fa77}.theme:nth-child(3){--sw:#a892ff}.theme:nth-child(4){--sw:#78e6db}.badge-controls .button{width:100%;margin-top:6px}.badge-note{color:#858791;font-size:11px;line-height:1.6;margin:16px 0 0}.tagline{font:10px 'DM Mono',monospace;color:#777983;margin-top:20px}@media(max-width:760px){.badge-layout{grid-template-columns:1fr}.badge-stage{min-height:250px;padding:14px}.badge-stage canvas{max-height:none}}
-</style></head><body><header class="topbar"><a class="brand" href="./index.html"><span class="brandmark">✳</span>forma <em>/ lab</em></a><nav class="nav"><a href="./index.html">Shape lab</a><a href="./task-6.html">Pattern</a><a href="./task5.html">Chart</a><a class="active" href="./speaker.html">Speaker badge</a></nav></header><main class="page"><div class="eyebrow">Identity study / 004</div><h1>Give it a name.</h1><p class="lead">A speaker badge that feels like it belongs to the event. Make it yours, then save a crisp PNG to share.</p><div class="badge-layout"><section class="panel"><div class="panel-head"><span>01 — Preview canvas</span><span class="status"><i></i>Live preview</span></div><div class="stage badge-stage"><canvas id="badgeCanvas" width="720" height="330" aria-label="Animated speaker badge preview"></canvas></div></section><aside class="panel badge-controls"><div class="panel-head" style="margin:-19px -19px 20px"><span>Customize</span><span>02 / 02</span></div><div class="field"><label for="speakerName">Speaker name</label><input id="speakerName" maxlength="26" value="Jane Smith"></div><div class="field"><label for="speakerRole">Role / title</label><input id="speakerRole" maxlength="32" value="Creative Developer"></div><div class="field"><label>Badge color</label><div class="theme-picks"><button class="theme active" data-color="#ff82bd" aria-label="Pink"></button><button class="theme" data-color="#d3fa77" aria-label="Lime"></button><button class="theme" data-color="#a892ff" aria-label="Lilac"></button><button class="theme" data-color="#78e6db" aria-label="Sea glass"></button></div></div><button class="button primary" id="download">Download badge ↓</button><p class="badge-note">Your badge updates as you type. Download a 720 × 330 PNG when it feels right.</p><div class="tagline">CANVAS API · PERSONAL IDENTITY</div></aside></div><div class="page-foot"><span>DESIGNED TO INTRODUCE YOU</span><span>BACK TO THE START → <a href="./index.html">Shape lab</a></span></div></main><footer class="site-footer"><span>FORMA LAB · CREATIVE CODE SERIES</span><span>SHAPE → PATTERN → DATA → PEOPLE</span></footer><script>const canvas=document.getElementById('badgeCanvas'),ctx=canvas.getContext('2d'),nameField=document.getElementById('speakerName'),roleField=document.getElementById('speakerRole');let color='#ff82bd',tick=0;function rounded(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}function draw(){const w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);tick+=.012;ctx.save();rounded(8,8,w-16,h-16,28);ctx.clip();const grad=ctx.createLinearGradient(0,0,w,h);grad.addColorStop(0,color);grad.addColorStop(1,'#25212e');ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);const glow=ctx.createRadialGradient(570+Math.sin(tick)*35,40+Math.cos(tick*.8)*18,5,570,75,260);glow.addColorStop(0,'#ffffff32');glow.addColorStop(1,'#ffffff00');ctx.fillStyle=glow;ctx.fillRect(300,0,420,330);ctx.strokeStyle='#ffffff20';ctx.lineWidth=1;for(let i=-260;i<850;i+=35){ctx.beginPath();ctx.moveTo(i+Math.sin(tick)*12,0);ctx.lineTo(i+190+Math.sin(tick)*12,h);ctx.stroke()}for(let i=0;i<7;i++){const x=460+i*47+(Math.sin(tick+i)*7),y=55+(i%3)*89;ctx.beginPath();ctx.arc(x,y,2.5+(Math.sin(tick*2+i)+1),0,Math.PI*2);ctx.fillStyle='#ffffffaa';ctx.fill()}ctx.restore();ctx.save();ctx.shadowColor='#0005';ctx.shadowBlur=20;ctx.beginPath();ctx.arc(105,164,52,0,Math.PI*2);ctx.fillStyle='#17181f';ctx.fill();ctx.restore();ctx.beginPath();ctx.arc(105,164,44,0,Math.PI*2);ctx.fillStyle='#ffffff1b';ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 42px DM Sans, sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('✳',105,165);ctx.textAlign='left';ctx.fillStyle='#ffffffaa';ctx.font='500 13px DM Mono, monospace';ctx.fillText('SPEAKER / 2026',185,114);ctx.fillStyle='#fff';ctx.font='600 35px Space Grotesk, sans-serif';let nm=nameField.value||'Your name';while(ctx.measureText(nm).width>440){ctx.font=String(parseInt(ctx.font)-1)+'px Space Grotesk, sans-serif'}ctx.fillText(nm,185,164);ctx.fillStyle='#ffffffc9';ctx.font='16px DM Sans, sans-serif';ctx.fillText(roleField.value||'Your title',185,198);ctx.fillStyle='#ffffff8a';ctx.font='11px DM Mono, monospace';ctx.fillText('FORMA  ·  CREATIVE CONFERENCE',185,267);ctx.strokeStyle='#ffffff55';ctx.beginPath();ctx.moveTo(185,230);ctx.lineTo(335,230);ctx.stroke();requestAnimationFrame(draw)}document.fonts.ready.then(()=>requestAnimationFrame(draw));nameField.addEventListener('input',()=>{});roleField.addEventListener('input',()=>{});document.querySelectorAll('.theme').forEach(b=>b.onclick=()=>{color=b.dataset.color;document.querySelectorAll('.theme').forEach(x=>x.classList.toggle('active',x===b));document.querySelector('.page').style.setProperty('--accent',color)});document.getElementById('download').onclick=()=>{const a=document.createElement('a');a.download=(nameField.value.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-')||'speaker')+'-badge.png';a.href=canvas.toDataURL('image/png');a.click()};</script></body></html>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#101114">
+    <title>People — Forma Motion Lab</title>
+    <link rel="stylesheet" href="./shared.css">
+    <style>
+        .page {
+            --accent: #ff82bd
+        }
+
+        .badge-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.5fr) minmax(230px, .7fr);
+            gap: 16px;
+            margin-top: 30px
+        }
+
+        .badge-stage {
+            min-height: 365px;
+            padding: 24px;
+            position: relative
+        }
+
+        .badge-stage canvas {
+            width: 100%;
+            height: auto;
+            max-height: 320px;
+            filter: drop-shadow(0 20px 35px #0007);
+            transition: transform .4s
+        }
+
+        .badge-stage:hover canvas {
+            transform: translateY(-4px) rotate(-.4deg)
+        }
+
+        .badge-controls {
+            padding: 19px
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 17px
+        }
+
+        .field label {
+            color: #aeb0b8;
+            font: 10px 'DM Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: .08em
+        }
+
+        .field input {
+            height: 40px;
+            border: 1px solid #ffffff18;
+            border-radius: 8px;
+            background: #222329;
+            color: #f4f3ef;
+            padding: 0 11px;
+            font: 13px 'DM Sans', sans-serif;
+            outline: none
+        }
+
+        .field input:focus {
+            border-color: #ff82bd99;
+            box-shadow: 0 0 0 3px #ff82bd18
+        }
+
+        .theme-picks {
+            display: flex;
+            gap: 9px
+        }
+
+        .theme {
+            width: 27px;
+            height: 27px;
+            padding: 0;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            background: var(--sw);
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .theme.active {
+            outline: 1px solid white;
+            outline-offset: 2px
+        }
+
+        .theme:nth-child(1) {
+            --sw: #ff82bd
+        }
+
+        .theme:nth-child(2) {
+            --sw: #d3fa77
+        }
+
+        .theme:nth-child(3) {
+            --sw: #a892ff
+        }
+
+        .theme:nth-child(4) {
+            --sw: #78e6db
+        }
+
+        .badge-controls .button {
+            width: 100%;
+            margin-top: 6px
+        }
+
+        .badge-note {
+            color: #858791;
+            font-size: 11px;
+            line-height: 1.6;
+            margin: 16px 0 0
+        }
+
+        .tagline {
+            font: 10px 'DM Mono', monospace;
+            color: #777983;
+            margin-top: 20px
+        }
+
+        @media(max-width:760px) {
+            .badge-layout {
+                grid-template-columns: 1fr
+            }
+
+            .badge-stage {
+                min-height: 250px;
+                padding: 14px
+            }
+
+            .badge-stage canvas {
+                max-height: none
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar"><a class="brand" href="./index.html"><span class="brandmark">✳</span>forma <em>/ lab</em></a>
+        <nav class="nav"><a href="./index.html">Shape lab</a><a href="./task-6.html">Pattern</a><a
+                href="./task5.html">Chart</a><a class="active" href="./speaker.html">Speaker badge</a></nav>
+    </header>
+    <main class="page">
+        <div class="eyebrow">Identity study / 004</div>
+        <h1>Give it a name.</h1>
+        <p class="lead">A speaker badge that feels like it belongs to the event. Make it yours, then save a crisp PNG to
+            share.</p>
+        <div class="badge-layout">
+            <section class="panel">
+                <div class="panel-head"><span>01 — Preview canvas</span><span class="status"><i></i>Live preview</span>
+                </div>
+                <div class="stage badge-stage"><canvas id="badgeCanvas" width="720" height="330"
+                        aria-label="Animated speaker badge preview"></canvas></div>
+            </section>
+            <aside class="panel badge-controls">
+                <div class="panel-head" style="margin:-19px -19px 20px"><span>Customize</span><span>02 / 02</span></div>
+                <div class="field"><label for="speakerName">Speaker name</label><input id="speakerName" maxlength="26"
+                        value="Jane Smith"></div>
+                <div class="field"><label for="speakerRole">Role / title</label><input id="speakerRole" maxlength="32"
+                        value="Creative Developer"></div>
+                <div class="field"><label>Badge color</label>
+                    <div class="theme-picks"><button class="theme active" data-color="#ff82bd"
+                            aria-label="Pink"></button><button class="theme" data-color="#d3fa77"
+                            aria-label="Lime"></button><button class="theme" data-color="#a892ff"
+                            aria-label="Lilac"></button><button class="theme" data-color="#78e6db"
+                            aria-label="Sea glass"></button></div>
+                </div><button class="button primary" id="download">Download badge ↓</button>
+                <p class="badge-note">Your badge updates as you type. Download a 720 × 330 PNG when it feels right.</p>
+                <div class="tagline">CANVAS API · PERSONAL IDENTITY</div>
+            </aside>
+        </div>
+        <div class="page-foot"><span>DESIGNED TO INTRODUCE YOU</span><span>BACK TO THE START → <a
+                    href="./index.html">Shape lab</a></span></div>
+    </main>
+    <footer class="site-footer"><span>FORMA LAB · CREATIVE CODE SERIES</span><span>SHAPE → PATTERN → DATA →
+            PEOPLE</span></footer>
+    <script>const canvas = document.getElementById('badgeCanvas'), ctx = canvas.getContext('2d'), nameField = document.getElementById('speakerName'), roleField = document.getElementById('speakerRole'); let color = '#ff82bd', tick = 0; function rounded(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r) } function draw() { const w = canvas.width, h = canvas.height; ctx.clearRect(0, 0, w, h); tick += .012; ctx.save(); rounded(8, 8, w - 16, h - 16, 28); ctx.clip(); const grad = ctx.createLinearGradient(0, 0, w, h); grad.addColorStop(0, color); grad.addColorStop(1, '#25212e'); ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h); const glow = ctx.createRadialGradient(570 + Math.sin(tick) * 35, 40 + Math.cos(tick * .8) * 18, 5, 570, 75, 260); glow.addColorStop(0, '#ffffff32'); glow.addColorStop(1, '#ffffff00'); ctx.fillStyle = glow; ctx.fillRect(300, 0, 420, 330); ctx.strokeStyle = '#ffffff20'; ctx.lineWidth = 1; for (let i = -260; i < 850; i += 35) { ctx.beginPath(); ctx.moveTo(i + Math.sin(tick) * 12, 0); ctx.lineTo(i + 190 + Math.sin(tick) * 12, h); ctx.stroke() } for (let i = 0; i < 7; i++) { const x = 460 + i * 47 + (Math.sin(tick + i) * 7), y = 55 + (i % 3) * 89; ctx.beginPath(); ctx.arc(x, y, 2.5 + (Math.sin(tick * 2 + i) + 1), 0, Math.PI * 2); ctx.fillStyle = '#ffffffaa'; ctx.fill() } ctx.restore(); ctx.save(); ctx.shadowColor = '#0005'; ctx.shadowBlur = 20; ctx.beginPath(); ctx.arc(105, 164, 52, 0, Math.PI * 2); ctx.fillStyle = '#17181f'; ctx.fill(); ctx.restore(); ctx.beginPath(); ctx.arc(105, 164, 44, 0, Math.PI * 2); ctx.fillStyle = '#ffffff1b'; ctx.fill(); ctx.fillStyle = '#fff'; ctx.font = 'bold 42px DM Sans, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('✳', 105, 165); ctx.textAlign = 'left'; ctx.fillStyle = '#ffffffaa'; ctx.font = '500 13px DM Mono, monospace'; ctx.fillText('SPEAKER / 2026', 185, 114); ctx.fillStyle = '#fff'; ctx.font = '600 35px Space Grotesk, sans-serif'; let nm = nameField.value || 'Your name'; while (ctx.measureText(nm).width > 440) { ctx.font = String(parseInt(ctx.font) - 1) + 'px Space Grotesk, sans-serif' } ctx.fillText(nm, 185, 164); ctx.fillStyle = '#ffffffc9'; ctx.font = '16px DM Sans, sans-serif'; ctx.fillText(roleField.value || 'Your title', 185, 198); ctx.fillStyle = '#ffffff8a'; ctx.font = '11px DM Mono, monospace'; ctx.fillText('FORMA  ·  CREATIVE CONFERENCE', 185, 267); ctx.strokeStyle = '#ffffff55'; ctx.beginPath(); ctx.moveTo(185, 230); ctx.lineTo(335, 230); ctx.stroke(); requestAnimationFrame(draw) } document.fonts.ready.then(() => requestAnimationFrame(draw)); nameField.addEventListener('input', () => { }); roleField.addEventListener('input', () => { }); document.querySelectorAll('.theme').forEach(b => b.onclick = () => { color = b.dataset.color; document.querySelectorAll('.theme').forEach(x => x.classList.toggle('active', x === b)); document.querySelector('.page').style.setProperty('--accent', color) }); document.getElementById('download').onclick = () => { const a = document.createElement('a'); a.download = (nameField.value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'speaker') + '-badge.png'; a.href = canvas.toDataURL('image/png'); a.click() };</script>
+</body>
+
+</html>
